@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NovaCart | Premium Modern Shopping</title>
+    <meta
+      name="description"
+      content="Shop stylish essentials, exclusive deals, and premium everyday favorites at NovaCart."
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #5b5cf6;
+        --primary-dark: #3f41cd;
+        --accent: #ff7a59;
+        --surface: #f8f9ff;
+        --text: #162033;
+        --muted: #64748b;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--text);
+        background: linear-gradient(180deg, #ffffff 0%, #f6f7ff 100%);
+      }
+
+      .navbar {
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.9) !important;
+        border-bottom: 1px solid rgba(91, 92, 246, 0.08);
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--primary) !important;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border: none;
+        box-shadow: 0 10px 24px rgba(91, 92, 246, 0.24);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+
+      .hero-section {
+        padding: 5rem 0 3rem;
+      }
+
+      .hero-card {
+        background: linear-gradient(135deg, #ffffff, #eef2ff);
+        border: 1px solid rgba(91, 92, 246, 0.12);
+        border-radius: 2rem;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      }
+
+      .section-title {
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+
+      .category-card,
+      .product-card,
+      .testimonial-card {
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        border-radius: 1.2rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+      }
+
+      .product-card img {
+        height: 220px;
+        object-fit: cover;
+        border-radius: 1rem;
+      }
+
+      .product-price {
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .badge-soft {
+        background: rgba(91, 92, 246, 0.12);
+        color: var(--primary);
+      }
+
+      .promo-banner {
+        background: linear-gradient(135deg, var(--primary), #6d71ff);
+        border-radius: 1.5rem;
+        color: #fff;
+      }
+
+      .footer {
+        background: #0f172a;
+        color: #cbd5e1;
+      }
+
+      .toast-container {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1100;
+      }
+
+      @media (max-width: 767px) {
+        .hero-section {
+          padding-top: 3rem;
+        }
+
+        .hero-card {
+          padding: 1.35rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toast-container"></div>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand fs-3" href="index.html">NovaCart</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+            <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+            <li class="nav-item">
+              <a class="btn btn-primary btn-sm" href="cart.html">
+                Cart <span class="badge text-bg-light ms-1" id="cartCount">0</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero-section">
+        <div class="container">
+          <div class="hero-card p-4 p-lg-5">
+            <div class="row align-items-center g-4">
+              <div class="col-lg-7">
+                <span class="badge badge-soft rounded-pill px-3 py-2 mb-3">Spring / Summer 2026</span>
+                <h1 class="display-5 fw-bold mb-3">Elevated essentials for the modern lifestyle.</h1>
+                <p class="lead text-muted mb-4">
+                  Discover curated fashion, smart accessories, and limited-time offers designed to make every day feel premium.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                  <a class="btn btn-primary btn-lg" href="#featured">Shop Now</a>
+                  <a class="btn btn-outline-secondary btn-lg" href="contact.html">Talk to Us</a>
+                </div>
+                <div class="row mt-4 g-3">
+                  <div class="col-4">
+                    <div class="fw-bold">4.9/5</div>
+                    <small class="text-muted">Customer love</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="fw-bold">24h</div>
+                    <small class="text-muted">Fast dispatch</small>
+                  </div>
+                  <div class="col-4">
+                    <div class="fw-bold">Free</div>
+                    <small class="text-muted">Returns</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <img
+                  src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80"
+                  alt="Stylish shopping experience"
+                  class="img-fluid rounded-4 shadow"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container py-5">
+        <div class="row g-4 text-center">
+          <div class="col-md-4">
+            <div class="p-4 rounded-4 bg-white border">
+              <h5 class="fw-bold">Instant Checkout</h5>
+              <p class="text-muted mb-0">One-click purchase experience with saved addresses and cards.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-4 rounded-4 bg-white border">
+              <h5 class="fw-bold">Flexible Returns</h5>
+              <p class="text-muted mb-0">Hassle-free returns within 30 days for every order.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-4 rounded-4 bg-white border">
+              <h5 class="fw-bold">VIP Rewards</h5>
+              <p class="text-muted mb-0">Earn points, unlock offers, and get first access to launches.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container py-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="section-title h3">Shop by Category</h2>
+            <p class="text-muted mb-0">Popular picks tailored to your style.</p>
+          </div>
+          <a href="#featured" class="btn btn-outline-primary">View All</a>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="category-card p-4 bg-white">
+              <h5 class="fw-bold">Smart Casual</h5>
+              <p class="text-muted">Relaxed tailoring for work, brunch, and weekend plans.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="category-card p-4 bg-white">
+              <h5 class="fw-bold">Accessories</h5>
+              <p class="text-muted">Refined details that add a premium finish to every look.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="category-card p-4 bg-white">
+              <h5 class="fw-bold">Limited Edition</h5>
+              <p class="text-muted">Exclusive capsule items released for a short seasonal run.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="featured" class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="section-title h3">Featured Products</h2>
+            <p class="text-muted mb-0">Best sellers chosen for comfort, quality, and impact.</p>
+          </div>
+        </div>
+
+        <div class="row g-4" id="productGrid"></div>
+      </section>
+
+      <section class="container py-3">
+        <div class="promo-banner p-4 p-lg-5">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <h3 class="fw-bold mb-2">Weekend flash sale is live</h3>
+              <p class="mb-0">Enjoy up to 35% off select favorites before midnight tonight.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+              <a class="btn btn-light text-primary fw-semibold" href="#featured">Claim Offer</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container py-5">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <h2 class="section-title h3">What our customers say</h2>
+            <div class="row g-4 mt-1">
+              <div class="col-md-6">
+                <div class="testimonial-card p-4 bg-white">
+                  <p class="mb-3">“The experience feels polished, fast, and incredibly thoughtful. I found my new favorites in minutes.”</p>
+                  <div class="fw-semibold">Maya Chen</div>
+                  <small class="text-muted">Verified Buyer</small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="testimonial-card p-4 bg-white">
+                  <p class="mb-3">“I love the design, the quality, and the quick updates. It’s my go-to for refreshing my wardrobe.”</p>
+                  <div class="fw-semibold">Jordan Miles</div>
+                  <small class="text-muted">Repeat Customer</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="p-4 rounded-4 bg-white border h-100">
+              <h5 class="fw-bold">Stay in the loop</h5>
+              <p class="text-muted">Get early access to launches and limited drops sent to your inbox.</p>
+              <div class="input-group">
+                <input type="email" class="form-control" placeholder="Your email" />
+                <button class="btn btn-primary">Join</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer py-5 mt-4">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <h5 class="fw-bold text-white">NovaCart</h5>
+            <p class="text-secondary">Crafted for people who love contemporary style and exceptional service.</p>
+          </div>
+          <div class="col-md-4">
+            <h6 class="text-white">Quick Links</h6>
+            <ul class="list-unstyled">
+              <li><a class="text-secondary text-decoration-none" href="index.html">Home</a></li>
+              <li><a class="text-secondary text-decoration-none" href="cart.html">My Cart</a></li>
+              <li><a class="text-secondary text-decoration-none" href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h6 class="text-white">Contact</h6>
+            <p class="mb-1 text-secondary">hello@novacart.example</p>
+            <p class="mb-0 text-secondary">+1 (800) 555-0199</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const productGrid = document.getElementById("productGrid");
+      const cartCount = document.getElementById("cartCount");
+      const toastContainer = document.querySelector(".toast-container");
+      let products = [];
+
+      function formatVND(value) {
+        return new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+          maximumFractionDigits: 0
+        }).format(value);
+      }
+
+      async function loadProducts() {
+        try {
+          const response = await fetch("/api/products");
+          if (!response.ok) throw new Error("Unable to load products");
+          products = await response.json();
+          renderProducts();
+        } catch (error) {
+          console.error(error);
+          productGrid.innerHTML = '<div class="col-12 text-center py-5">Unable to load products right now.</div>';
+        }
+      }
+
+      function renderProducts() {
+        productGrid.innerHTML = "";
+
+        if (!products.length) {
+          productGrid.innerHTML = '<div class="col-12 text-center py-5">No products available.</div>';
+          return;
+        }
+
+        products.forEach((product) => {
+          const card = document.createElement("article");
+          card.className = "col-md-6 col-lg-3";
+          card.innerHTML = `
+            <div class="product-card h-100 p-3 bg-white">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="badge badge-soft rounded-pill px-3 py-2">${product.tag}</span>
+                <span class="text-muted small">Fresh drop</span>
+              </div>
+              <img src="${product.image}" alt="${product.name}" class="img-fluid w-100 mb-3" />
+              <h5 class="fw-bold">${product.name}</h5>
+              <p class="text-muted small mb-3">${product.description}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="product-price">${formatVND(product.price)}</span>
+                <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="${product.id}">Add to Cart</button>
+              </div>
+            </div>
+          `;
+          productGrid.appendChild(card);
+        });
+
+        document.querySelectorAll(".add-to-cart").forEach((button) => {
+          button.addEventListener("click", () => addToCart(button.dataset.id));
+        });
+      }
+
+      function getCart() {
+        return JSON.parse(localStorage.getItem("novaCart") || "[]");
+      }
+
+      function saveCart(cart) {
+        localStorage.setItem("novaCart", JSON.stringify(cart));
+      }
+
+      function updateCartCount() {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+      }
+
+      function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "toast align-items-center text-white bg-dark border-0 show";
+        toast.setAttribute("role", "status");
+        toast.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+          </div>
+        `;
+        toastContainer.appendChild(toast);
+        setTimeout(() => toast.remove(), 2200);
+      }
+
+      function addToCart(productId) {
+        const cart = getCart();
+        const found = products.find((product) => product.id === Number(productId));
+
+        if (!found) return;
+
+        const existingItem = cart.find((item) => item.id === found.id);
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            id: found.id,
+            name: found.name,
+            price: found.price,
+            image: found.image,
+            quantity: 1
+          });
+        }
+
+        saveCart(cart);
+        updateCartCount();
+        showToast(`${found.name} added to your cart.`);
+      }
+
+      loadProducts();
+      updateCartCount();
+    </script>
+  </body>
+</html>
