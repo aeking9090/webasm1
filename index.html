@@ -470,8 +470,8 @@
       const avatarMenuName = document.getElementById("avatarMenuName");
       const avatarMenu = document.getElementById("avatarMenu");
       const logoutBtn = document.getElementById("logoutBtn");
-      const loginLink = document.querySelector('.nav-link[href="login.html"]');
-      const registerLink = document.querySelector('.nav-link[href="register.html"]');
+      const loginLink = document.querySelector('.nav-link[href="./login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="./register.html"]');
 
       function renderProducts() {
         productGrid.innerHTML = "";
@@ -602,7 +602,7 @@
       if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
           localStorage.removeItem("novaSession");
-          window.location.href = "login.html";
+          window.location.href = "./login.html";
         });
       }
 

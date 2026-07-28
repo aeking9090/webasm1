@@ -326,17 +326,19 @@
       const avatarMenuName = document.getElementById("avatarMenuName");
       const avatarMenu = document.getElementById("avatarMenu");
       const logoutBtn = document.getElementById("logoutBtn");
-      const loginLink = document.querySelector('.nav-link[href="login.html"]');
-      const registerLink = document.querySelector('.nav-link[href="register.html"]');
+      const loginLink = document.querySelector('.nav-link[href="./login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="./register.html"]');
 
       if (!session) {
-        window.location.href = "login.html";
+        window.location.href = "./login.html";
+        return;
       }
 
       const currentUser = users.find((user) => user.email === session.email) || null;
 
       if (!currentUser) {
-        window.location.href = "login.html";
+        window.location.href = "./login.html";
+        return;
       }
 
       document.getElementById("profileName").textContent = currentUser.name;
@@ -347,6 +349,21 @@
       document.getElementById("phone").value = currentUser.phone || "";
       document.getElementById("email").value = currentUser.email;
       document.getElementById("address").value = currentUser.address || "";
+
+      function renderAvatarElement(element, avatarValue, fallbackText) {
+        if (!element) return;
+        element.innerHTML = "";
+
+        if (avatarValue && typeof avatarValue === "string" && avatarValue.startsWith("data:image")) {
+          const img = document.createElement("img");
+          img.src = avatarValue;
+          img.alt = "User avatar";
+          img.className = "avatar-image";
+          element.appendChild(img);
+        } else {
+          element.textContent = avatarValue || fallbackText || "U";
+        }
+      }
 
       function updateAvatarMenu() {
         const sessionData = JSON.parse(localStorage.getItem("novaSession") || "null");
@@ -390,7 +407,7 @@
       });
 
       document.getElementById("backButton").addEventListener("click", function () {
-        window.location.href = "index.html";
+        window.location.href = "./index.html";
       });
 
       if (avatarTrigger) {
@@ -413,7 +430,7 @@
       if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
           localStorage.removeItem("novaSession");
-          window.location.href = "login.html";
+          window.location.href = "./login.html";
         });
       }
 

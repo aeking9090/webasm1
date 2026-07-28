@@ -251,8 +251,8 @@
       const customerName = document.getElementById("customerName");
       const customerAvatarInitial = document.getElementById("customerAvatarInitial");
       const customerLogoutBtn = document.getElementById("customerLogoutBtn");
-      const loginLink = document.querySelector('.nav-link[href="login.html"]');
-      const registerLink = document.querySelector('.nav-link[href="register.html"]');
+      const loginLink = document.querySelector('.nav-link[href="./login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="./register.html"]');
 
       function getCart() {
         return JSON.parse(localStorage.getItem("novaCart") || "[]");
@@ -310,6 +310,21 @@
         subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
         taxEl.textContent = `$${tax.toFixed(2)}`;
         totalEl.textContent = `$${total.toFixed(2)}`;
+      }
+
+      function renderAvatarElement(element, avatarValue, fallbackText) {
+        if (!element) return;
+        element.innerHTML = "";
+
+        if (avatarValue && typeof avatarValue === "string" && avatarValue.startsWith("data:image")) {
+          const img = document.createElement("img");
+          img.src = avatarValue;
+          img.alt = "User avatar";
+          img.className = "avatar-image";
+          element.appendChild(img);
+        } else {
+          element.textContent = avatarValue || fallbackText || "U";
+        }
       }
 
       function updateAvatarMenu() {
@@ -411,14 +426,14 @@
       if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
           localStorage.removeItem("novaSession");
-          window.location.href = "login.html";
+          window.location.href = "./login.html";
         });
       }
 
       if (customerLogoutBtn) {
         customerLogoutBtn.addEventListener("click", () => {
           localStorage.removeItem("novaSession");
-          window.location.href = "login.html";
+          window.location.href = "./login.html";
         });
       }
 

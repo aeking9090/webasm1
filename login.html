@@ -223,8 +223,8 @@
       const avatarMenuName = document.getElementById("avatarMenuName");
       const avatarMenu = document.getElementById("avatarMenu");
       const logoutBtn = document.getElementById("logoutBtn");
-      const loginLink = document.querySelector('.nav-link[href="login.html"]');
-      const registerLink = document.querySelector('.nav-link[href="register.html"]');
+      const loginLink = document.querySelector('.nav-link[href="./login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="./register.html"]');
 
       function validateEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -298,7 +298,7 @@
       if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
           localStorage.removeItem("novaSession");
-          window.location.href = "login.html";
+          window.location.href = "./login.html";
         });
       }
 
@@ -330,7 +330,7 @@
         }
 
         localStorage.setItem("novaSession", JSON.stringify({ email, name: match.name, avatar: match.avatar || null }));
-        window.location.href = "index.html";
+        window.location.href = "./index.html";
       });
     </script>
   </body>

@@ -239,8 +239,8 @@
       const avatarMenuName = document.getElementById("avatarMenuName");
       const avatarMenu = document.getElementById("avatarMenu");
       const logoutBtn = document.getElementById("logoutBtn");
-      const loginLink = document.querySelector('.nav-link[href="login.html"]');
-      const registerLink = document.querySelector('.nav-link[href="register.html"]');
+      const loginLink = document.querySelector('.nav-link[href="./login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="./register.html"]');
 
       function renderAvatarElement(element, avatarValue, fallbackText) {
         if (!element) return;
@@ -311,7 +311,7 @@
       if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
           localStorage.removeItem("novaSession");
-          window.location.href = "login.html";
+          window.location.href = "./login.html";
         });
       }
 
@@ -365,7 +365,7 @@
         users.push(newUser);
         localStorage.setItem("novaUsers", JSON.stringify(users));
         localStorage.setItem("novaSession", JSON.stringify({ name, email, avatar: null }));
-        window.location.href = "login.html";
+        window.location.href = "./login.html";
       });
     </script>
   </body>
