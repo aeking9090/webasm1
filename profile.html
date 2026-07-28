@@ -248,10 +248,18 @@
           <div class="col-lg-4">
             <div class="card-soft p-4 bg-white">
               <div class="d-flex align-items-center gap-3 mb-4">
-                <div class="avatar" id="profileAvatarInitial">U</div>
+                <div class="avatar" id="profileAvatarDisplay">U</div>
                 <div>
                   <h3 class="fw-bold mb-1" id="profileName">User</h3>
                   <p class="text-muted mb-0" id="profileEmail">email@example.com</p>
+                  <select class="form-select form-select-sm mt-2" id="avatarSelect" style="max-width: 180px;">
+                    <option value="👤">👤 Default</option>
+                    <option value="🧑">🧑 Person</option>
+                    <option value="👩">👩 Woman</option>
+                    <option value="🧔">🧔 Man</option>
+                    <option value="🤖">🤖 Bot</option>
+                    <option value="🦊">🦊 Fox</option>
+                  </select>
                 </div>
               </div>
               <div class="list-group list-group-flush">
@@ -307,6 +315,8 @@
     <script>
       const session = JSON.parse(localStorage.getItem("novaSession") || "null");
       const users = JSON.parse(localStorage.getItem("novaUsers") || "[]");
+      const avatarSelect = document.getElementById("avatarSelect");
+      const profileAvatarDisplay = document.getElementById("profileAvatarDisplay");
       const avatarNavItem = document.getElementById("avatarNavItem");
       const avatarTrigger = document.getElementById("avatarTrigger");
       const avatarInitial = document.getElementById("avatarInitial");
@@ -329,7 +339,8 @@
 
       document.getElementById("profileName").textContent = currentUser.name;
       document.getElementById("profileEmail").textContent = currentUser.email;
-      document.getElementById("profileAvatarInitial").textContent = currentUser.name.charAt(0).toUpperCase();
+      avatarSelect.value = currentUser.avatar || "👤";
+      profileAvatarDisplay.textContent = currentUser.avatar || currentUser.name.charAt(0).toUpperCase();
 
       document.getElementById("name").value = currentUser.name;
       document.getElementById("phone").value = currentUser.phone || "";
@@ -347,10 +358,11 @@
         }
 
         const fullName = sessionData.name || sessionData.email?.split("@")[0] || "Customer";
-        const initial = fullName.charAt(0).toUpperCase();
-        avatarInitial.textContent = initial;
+        const avatarValue = sessionData.avatar || (sessionData.name ? sessionData.name.charAt(0).toUpperCase() : "U");
+        avatarInitial.textContent = avatarValue;
         avatarName.textContent = fullName;
         avatarMenuName.textContent = fullName;
+        profileAvatarDisplay.textContent = avatarValue;
         avatarNavItem.style.display = "flex";
 
         if (loginLink) loginLink.parentElement.style.display = "none";
@@ -400,16 +412,18 @@
           name: document.getElementById("name").value.trim(),
           phone: document.getElementById("phone").value.trim(),
           email: document.getElementById("email").value.trim(),
-          address: document.getElementById("address").value.trim()
+          address: document.getElementById("address").value.trim(),
+          avatar: avatarSelect.value || currentUser.avatar || "👤"
         };
 
         const updatedUsers = users.map((user) => (user.email === currentUser.email ? updatedUser : user));
         localStorage.setItem("novaUsers", JSON.stringify(updatedUsers));
-        localStorage.setItem("novaSession", JSON.stringify({ name: updatedUser.name, email: updatedUser.email }));
+        localStorage.setItem("novaSession", JSON.stringify({ name: updatedUser.name, email: updatedUser.email, avatar: updatedUser.avatar }));
 
         document.getElementById("profileName").textContent = updatedUser.name;
         document.getElementById("profileEmail").textContent = updatedUser.email;
-        document.getElementById("profileAvatarInitial").textContent = updatedUser.name.charAt(0).toUpperCase();
+        profileAvatarDisplay.textContent = updatedUser.avatar || updatedUser.name.charAt(0).toUpperCase();
+        updateAvatarMenu();
         alert("Profile updated successfully.");
       });
     </script>

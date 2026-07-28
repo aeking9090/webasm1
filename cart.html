@@ -316,12 +316,12 @@
         }
 
         const fullName = session.name || session.email?.split("@")[0] || "Customer";
-        const initial = fullName.charAt(0).toUpperCase();
-        avatarInitial.textContent = initial;
+        const avatarValue = session.avatar || (session.name ? session.name.charAt(0).toUpperCase() : "U");
+        avatarInitial.textContent = avatarValue;
         avatarName.textContent = fullName;
         avatarMenuName.textContent = fullName;
         customerName.textContent = fullName;
-        customerAvatarInitial.textContent = initial;
+        customerAvatarInitial.textContent = avatarValue;
         avatarNavItem.style.display = "flex";
         customerCard.style.display = "block";
 
