@@ -67,6 +67,14 @@
         color: white;
         font-weight: 700;
         flex-shrink: 0;
+        overflow: hidden;
+      }
+
+      .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
 
       .avatar-menu {
@@ -234,6 +242,21 @@
       const loginLink = document.querySelector('.nav-link[href="login.html"]');
       const registerLink = document.querySelector('.nav-link[href="register.html"]');
 
+      function renderAvatarElement(element, avatarValue, fallbackText) {
+        if (!element) return;
+        element.innerHTML = "";
+
+        if (avatarValue && typeof avatarValue === "string" && avatarValue.startsWith("data:image")) {
+          const img = document.createElement("img");
+          img.src = avatarValue;
+          img.alt = "User avatar";
+          img.className = "avatar-image";
+          element.appendChild(img);
+        } else {
+          element.textContent = avatarValue || fallbackText || "U";
+        }
+      }
+
       function validateEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       }
@@ -254,7 +277,7 @@
 
         const fullName = session.name || session.email?.split("@")[0] || "Customer";
         const avatarValue = session.avatar || (session.name ? session.name.charAt(0).toUpperCase() : "U");
-        avatarInitial.textContent = avatarValue;
+        renderAvatarElement(avatarInitial, avatarValue, "U");
         avatarName.textContent = fullName;
         avatarMenuName.textContent = fullName;
         avatarNavItem.style.display = "flex";
@@ -341,7 +364,7 @@
         const newUser = { name, phone, email, password, address };
         users.push(newUser);
         localStorage.setItem("novaUsers", JSON.stringify(users));
-        localStorage.setItem("novaSession", JSON.stringify({ name, email }));
+        localStorage.setItem("novaSession", JSON.stringify({ name, email, avatar: null }));
         window.location.href = "login.html";
       });
     </script>

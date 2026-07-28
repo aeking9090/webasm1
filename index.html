@@ -528,7 +528,7 @@
 
         const fullName = session.name || session.email?.split("@")[0] || "Customer";
         const avatarValue = session.avatar || (session.name ? session.name.charAt(0).toUpperCase() : "U");
-        avatarInitial.textContent = avatarValue;
+        renderAvatarElement(avatarInitial, avatarValue, "U");
         avatarName.textContent = fullName;
         avatarMenuName.textContent = fullName;
         avatarNavItem.style.display = "flex";

@@ -71,6 +71,14 @@
         color: white;
         font-weight: 700;
         flex-shrink: 0;
+        overflow: hidden;
+      }
+
+      .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
 
       .avatar-menu {
@@ -317,11 +325,11 @@
 
         const fullName = session.name || session.email?.split("@")[0] || "Customer";
         const avatarValue = session.avatar || (session.name ? session.name.charAt(0).toUpperCase() : "U");
-        avatarInitial.textContent = avatarValue;
+        renderAvatarElement(avatarInitial, avatarValue, "U");
         avatarName.textContent = fullName;
         avatarMenuName.textContent = fullName;
         customerName.textContent = fullName;
-        customerAvatarInitial.textContent = avatarValue;
+        renderAvatarElement(customerAvatarInitial, avatarValue, "U");
         avatarNavItem.style.display = "flex";
         customerCard.style.display = "block";
 

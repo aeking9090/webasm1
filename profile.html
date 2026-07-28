@@ -130,6 +130,14 @@
         place-items: center;
         font-size: 1.5rem;
         font-weight: 700;
+        overflow: hidden;
+      }
+
+      .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
 
       .avatar-wrap {
@@ -252,14 +260,8 @@
                 <div>
                   <h3 class="fw-bold mb-1" id="profileName">User</h3>
                   <p class="text-muted mb-0" id="profileEmail">email@example.com</p>
-                  <select class="form-select form-select-sm mt-2" id="avatarSelect" style="max-width: 180px;">
-                    <option value="👤">👤 Default</option>
-                    <option value="🧑">🧑 Person</option>
-                    <option value="👩">👩 Woman</option>
-                    <option value="🧔">🧔 Man</option>
-                    <option value="🤖">🤖 Bot</option>
-                    <option value="🦊">🦊 Fox</option>
-                  </select>
+                  <input type="file" class="form-control form-control-sm mt-2" id="avatarUpload" accept="image/*" />
+                  <small class="text-muted">Upload any image to use as your avatar.</small>
                 </div>
               </div>
               <div class="list-group list-group-flush">
@@ -315,7 +317,7 @@
     <script>
       const session = JSON.parse(localStorage.getItem("novaSession") || "null");
       const users = JSON.parse(localStorage.getItem("novaUsers") || "[]");
-      const avatarSelect = document.getElementById("avatarSelect");
+      const avatarUpload = document.getElementById("avatarUpload");
       const profileAvatarDisplay = document.getElementById("profileAvatarDisplay");
       const avatarNavItem = document.getElementById("avatarNavItem");
       const avatarTrigger = document.getElementById("avatarTrigger");
@@ -339,8 +341,7 @@
 
       document.getElementById("profileName").textContent = currentUser.name;
       document.getElementById("profileEmail").textContent = currentUser.email;
-      avatarSelect.value = currentUser.avatar || "👤";
-      profileAvatarDisplay.textContent = currentUser.avatar || currentUser.name.charAt(0).toUpperCase();
+      renderAvatarElement(profileAvatarDisplay, currentUser.avatar || null, currentUser.name.charAt(0).toUpperCase());
 
       document.getElementById("name").value = currentUser.name;
       document.getElementById("phone").value = currentUser.phone || "";
@@ -359,10 +360,10 @@
 
         const fullName = sessionData.name || sessionData.email?.split("@")[0] || "Customer";
         const avatarValue = sessionData.avatar || (sessionData.name ? sessionData.name.charAt(0).toUpperCase() : "U");
-        avatarInitial.textContent = avatarValue;
+        renderAvatarElement(avatarInitial, avatarValue, "U");
         avatarName.textContent = fullName;
         avatarMenuName.textContent = fullName;
-        profileAvatarDisplay.textContent = avatarValue;
+        renderAvatarElement(profileAvatarDisplay, avatarValue, fullName.charAt(0).toUpperCase());
         avatarNavItem.style.display = "flex";
 
         if (loginLink) loginLink.parentElement.style.display = "none";
@@ -373,6 +374,20 @@
         const isOpen = avatarMenu.classList.toggle("show");
         avatarTrigger.setAttribute("aria-expanded", String(isOpen));
       }
+
+      let selectedAvatar = currentUser.avatar || null;
+
+      avatarUpload.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          selectedAvatar = event.target.result;
+          renderAvatarElement(profileAvatarDisplay, selectedAvatar, currentUser.name.charAt(0).toUpperCase());
+        };
+        reader.readAsDataURL(file);
+      });
 
       document.getElementById("backButton").addEventListener("click", function () {
         window.location.href = "index.html";
@@ -413,7 +428,7 @@
           phone: document.getElementById("phone").value.trim(),
           email: document.getElementById("email").value.trim(),
           address: document.getElementById("address").value.trim(),
-          avatar: avatarSelect.value || currentUser.avatar || "👤"
+          avatar: selectedAvatar || currentUser.avatar || null
         };
 
         const updatedUsers = users.map((user) => (user.email === currentUser.email ? updatedUser : user));
@@ -422,7 +437,7 @@
 
         document.getElementById("profileName").textContent = updatedUser.name;
         document.getElementById("profileEmail").textContent = updatedUser.email;
-        profileAvatarDisplay.textContent = updatedUser.avatar || updatedUser.name.charAt(0).toUpperCase();
+        renderAvatarElement(profileAvatarDisplay, updatedUser.avatar || null, updatedUser.name.charAt(0).toUpperCase());
         updateAvatarMenu();
         alert("Profile updated successfully.");
       });
