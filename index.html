@@ -63,6 +63,77 @@
         transform: translateY(-2px);
       }
 
+      .avatar-wrap {
+        position: relative;
+      }
+
+      .avatar-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.4rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(91, 92, 246, 0.1);
+        border: 1px solid rgba(91, 92, 246, 0.14);
+        color: var(--primary);
+        cursor: pointer;
+        min-width: 150px;
+      }
+
+      .avatar-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .avatar-menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 190px;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 1rem;
+        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
+        padding: 0.6rem;
+        display: none;
+        z-index: 1200;
+        max-height: 180px;
+        overflow-y: auto;
+      }
+
+      .avatar-menu.show {
+        display: block;
+      }
+
+      .avatar-menu .menu-name {
+        font-weight: 700;
+        padding: 0.4rem 0.5rem 0.65rem;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        margin-bottom: 0.4rem;
+      }
+
+      .avatar-menu button {
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: transparent;
+        color: #dc2626;
+        padding: 0.55rem 0.5rem;
+        border-radius: 0.65rem;
+        font-weight: 600;
+      }
+
+      .avatar-menu button:hover {
+        background: rgba(220, 38, 38, 0.08);
+      }
+
       .hero-section {
         padding: 5rem 0 3rem;
       }
@@ -154,8 +225,19 @@
             <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
             <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+            <li class="nav-item avatar-wrap" id="avatarNavItem" style="display: none">
+              <div class="avatar-trigger" id="avatarTrigger" role="button" tabindex="0" aria-expanded="false">
+                <span class="avatar-badge" id="avatarInitial">U</span>
+                <span class="fw-semibold d-none d-lg-inline" id="avatarName">User</span>
+              </div>
+              <div class="avatar-menu" id="avatarMenu">
+                <div class="menu-name" id="avatarMenuName">Customer</div>
+                <button type="button" id="logoutBtn">Logout</button>
+              </div>
+            </li>
             <li class="nav-item">
               <a class="btn btn-primary btn-sm" href="cart.html">
                 Cart <span class="badge text-bg-light ms-1" id="cartCount">0</span>
@@ -347,38 +429,52 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      const products = [
+        {
+          id: 1,
+          name: "Aero Jacket",
+          price: 129,
+          image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80",
+          tag: "Best Seller"
+        },
+        {
+          id: 2,
+          name: "Lumen Tote",
+          price: 84,
+          image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80",
+          tag: "Trending"
+        },
+        {
+          id: 3,
+          name: "Contour Sneakers",
+          price: 112,
+          image: "https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=900&q=80",
+          tag: "Limited"
+        },
+        {
+          id: 4,
+          name: "Harbor Watch",
+          price: 159,
+          image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80",
+          tag: "New Arrivals"
+        }
+      ];
+
       const productGrid = document.getElementById("productGrid");
       const cartCount = document.getElementById("cartCount");
       const toastContainer = document.querySelector(".toast-container");
-      let products = [];
-
-      function formatVND(value) {
-        return new Intl.NumberFormat("vi-VN", {
-          style: "currency",
-          currency: "VND",
-          maximumFractionDigits: 0
-        }).format(value);
-      }
-
-      async function loadProducts() {
-        try {
-          const response = await fetch("/api/products");
-          if (!response.ok) throw new Error("Unable to load products");
-          products = await response.json();
-          renderProducts();
-        } catch (error) {
-          console.error(error);
-          productGrid.innerHTML = '<div class="col-12 text-center py-5">Unable to load products right now.</div>';
-        }
-      }
+      const avatarNavItem = document.getElementById("avatarNavItem");
+      const avatarTrigger = document.getElementById("avatarTrigger");
+      const avatarInitial = document.getElementById("avatarInitial");
+      const avatarName = document.getElementById("avatarName");
+      const avatarMenuName = document.getElementById("avatarMenuName");
+      const avatarMenu = document.getElementById("avatarMenu");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const loginLink = document.querySelector('.nav-link[href="login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="register.html"]');
 
       function renderProducts() {
         productGrid.innerHTML = "";
-
-        if (!products.length) {
-          productGrid.innerHTML = '<div class="col-12 text-center py-5">No products available.</div>';
-          return;
-        }
 
         products.forEach((product) => {
           const card = document.createElement("article");
@@ -391,9 +487,9 @@
               </div>
               <img src="${product.image}" alt="${product.name}" class="img-fluid w-100 mb-3" />
               <h5 class="fw-bold">${product.name}</h5>
-              <p class="text-muted small mb-3">${product.description}</p>
+              <p class="text-muted small mb-3">Modern, lightweight comfort with elevated craftsmanship.</p>
               <div class="d-flex justify-content-between align-items-center">
-                <span class="product-price">${formatVND(product.price)}</span>
+                <span class="product-price">$${product.price}</span>
                 <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="${product.id}">Add to Cart</button>
               </div>
             </div>
@@ -407,7 +503,7 @@
       }
 
       function getCart() {
-        return JSON.parse(localStorage.getItem("novaCart") || "[]");
+        return JSON.parse(localStorage.getItem("novaCart") || "[]") ;
       }
 
       function saveCart(cart) {
@@ -418,6 +514,33 @@
         const cart = getCart();
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartCount.textContent = totalItems;
+      }
+
+      function updateAvatarMenu() {
+        const session = JSON.parse(localStorage.getItem("novaSession") || "null");
+
+        if (!session) {
+          avatarNavItem.style.display = "none";
+          if (loginLink) loginLink.parentElement.style.display = "block";
+          if (registerLink) registerLink.parentElement.style.display = "block";
+          return;
+        }
+
+        const fullName = session.name || session.email?.split("@")[0] || "Customer";
+        const initial = fullName.charAt(0).toUpperCase();
+        avatarInitial.textContent = initial;
+        avatarName.textContent = fullName;
+        avatarMenuName.textContent = fullName;
+        avatarNavItem.style.display = "flex";
+
+        if (loginLink) loginLink.parentElement.style.display = "none";
+        if (registerLink) registerLink.parentElement.style.display = "none";
+      }
+
+      function toggleAvatarMenu() {
+        if (!avatarMenu) return;
+        const isOpen = avatarMenu.classList.toggle("show");
+        avatarTrigger.setAttribute("aria-expanded", String(isOpen));
       }
 
       function showToast(message) {
@@ -459,8 +582,33 @@
         showToast(`${found.name} added to your cart.`);
       }
 
-      loadProducts();
+      if (avatarTrigger) {
+        avatarTrigger.addEventListener("click", toggleAvatarMenu);
+        avatarTrigger.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleAvatarMenu();
+          }
+        });
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!avatarNavItem.contains(event.target)) {
+          avatarMenu.classList.remove("show");
+          avatarTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("novaSession");
+          window.location.href = "login.html";
+        });
+      }
+
+      renderProducts();
       updateCartCount();
+      updateAvatarMenu();
     </script>
   </body>
 </html>

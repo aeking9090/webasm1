@@ -37,6 +37,77 @@
         border: none;
       }
 
+      .avatar-wrap {
+        position: relative;
+      }
+
+      .avatar-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.4rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(91, 92, 246, 0.1);
+        border: 1px solid rgba(91, 92, 246, 0.14);
+        color: var(--primary);
+        cursor: pointer;
+        min-width: 150px;
+      }
+
+      .avatar-badge {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: white;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      .avatar-menu {
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        right: 0;
+        min-width: 190px;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 1rem;
+        box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
+        padding: 0.6rem;
+        display: none;
+        z-index: 1200;
+        max-height: 180px;
+        overflow-y: auto;
+      }
+
+      .avatar-menu.show {
+        display: block;
+      }
+
+      .avatar-menu .menu-name {
+        font-weight: 700;
+        padding: 0.4rem 0.5rem 0.65rem;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        margin-bottom: 0.4rem;
+      }
+
+      .avatar-menu button {
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: transparent;
+        color: #dc2626;
+        padding: 0.55rem 0.5rem;
+        border-radius: 0.65rem;
+        font-weight: 600;
+      }
+
+      .avatar-menu button:hover {
+        background: rgba(220, 38, 38, 0.08);
+      }
+
       .card-soft {
         border: 1px solid rgba(15, 23, 42, 0.06);
         border-radius: 1.3rem;
@@ -74,8 +145,19 @@
             <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
             <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
             <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+            <li class="nav-item avatar-wrap" id="avatarNavItem" style="display: none">
+              <div class="avatar-trigger" id="avatarTrigger" role="button" tabindex="0" aria-expanded="false">
+                <span class="avatar-badge" id="avatarInitial">U</span>
+                <span class="fw-semibold d-none d-lg-inline" id="avatarName">User</span>
+              </div>
+              <div class="avatar-menu" id="avatarMenu">
+                <div class="menu-name" id="avatarMenuName">Customer</div>
+                <button type="button" id="logoutBtn">Logout</button>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -172,6 +254,41 @@
     <script>
       const form = document.getElementById("contactForm");
       const toastContainer = document.querySelector(".toast-container");
+      const avatarNavItem = document.getElementById("avatarNavItem");
+      const avatarTrigger = document.getElementById("avatarTrigger");
+      const avatarInitial = document.getElementById("avatarInitial");
+      const avatarName = document.getElementById("avatarName");
+      const avatarMenuName = document.getElementById("avatarMenuName");
+      const avatarMenu = document.getElementById("avatarMenu");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const loginLink = document.querySelector('.nav-link[href="login.html"]');
+      const registerLink = document.querySelector('.nav-link[href="register.html"]');
+
+      function updateAvatarMenu() {
+        const session = JSON.parse(localStorage.getItem("novaSession") || "null");
+
+        if (!session) {
+          avatarNavItem.style.display = "none";
+          if (loginLink) loginLink.parentElement.style.display = "block";
+          if (registerLink) registerLink.parentElement.style.display = "block";
+          return;
+        }
+
+        const fullName = session.name || session.email?.split("@")[0] || "Customer";
+        const initial = fullName.charAt(0).toUpperCase();
+        avatarInitial.textContent = initial;
+        avatarName.textContent = fullName;
+        avatarMenuName.textContent = fullName;
+        avatarNavItem.style.display = "flex";
+
+        if (loginLink) loginLink.parentElement.style.display = "none";
+        if (registerLink) registerLink.parentElement.style.display = "none";
+      }
+
+      function toggleAvatarMenu() {
+        const isOpen = avatarMenu.classList.toggle("show");
+        avatarTrigger.setAttribute("aria-expanded", String(isOpen));
+      }
 
       function showToast(message) {
         const toast = document.createElement("div");
@@ -184,6 +301,32 @@
         toastContainer.appendChild(toast);
         setTimeout(() => toast.remove(), 2600);
       }
+
+      if (avatarTrigger) {
+        avatarTrigger.addEventListener("click", toggleAvatarMenu);
+        avatarTrigger.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleAvatarMenu();
+          }
+        });
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!avatarNavItem.contains(event.target)) {
+          avatarMenu.classList.remove("show");
+          avatarTrigger.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("novaSession");
+          window.location.href = "login.html";
+        });
+      }
+
+      updateAvatarMenu();
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
