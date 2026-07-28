@@ -330,7 +330,7 @@
       const registerLink = document.querySelector('.nav-link[href="./register.html"]');
       const isAuthPage = /\/(login|register)\.html$/i.test(window.location.pathname);
 
-      if (!session) {
+      if (!session || !session.email) {
         window.location.href = "./login.html";
         return;
       }
