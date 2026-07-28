@@ -232,7 +232,7 @@
             <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-            <li class="nav-item"><a class="nav-link active" href="profile.html">Profile</a></li>
+            <li class="nav-item"><a class="nav-link active" href="./profile.html">Profile</a></li>
             <li class="nav-item"><a class="nav-link" href="./login.html">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="./register.html">Register</a></li>
             <li class="nav-item avatar-wrap" id="avatarNavItem" style="display: none">
@@ -446,10 +446,17 @@
           phone: document.getElementById("phone").value.trim(),
           email: document.getElementById("email").value.trim(),
           address: document.getElementById("address").value.trim(),
-          avatar: selectedAvatar || currentUser.avatar || null
+          avatar: selectedAvatar || currentUser.avatar || null,
+          password: currentUser.password
         };
 
-        const updatedUsers = users.map((user) => (user.email === currentUser.email ? updatedUser : user));
+        const updatedUsers = users.map((user) => {
+          if (user.email === currentUser.email) {
+            return updatedUser;
+          }
+          return user;
+        });
+
         localStorage.setItem("novaUsers", JSON.stringify(updatedUsers));
         localStorage.setItem("novaSession", JSON.stringify({ name: updatedUser.name, email: updatedUser.email, avatar: updatedUser.avatar }));
 
@@ -457,7 +464,7 @@
         document.getElementById("profileEmail").textContent = updatedUser.email;
         renderAvatarElement(profileAvatarDisplay, updatedUser.avatar || null, updatedUser.name.charAt(0).toUpperCase());
         updateAvatarMenu();
-        alert("Profile updated successfully.");
+        window.location.href = "./index.html";
       });
     </script>
   </body>
