@@ -233,8 +233,8 @@
             <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
             <li class="nav-item"><a class="nav-link active" href="profile.html">Profile</a></li>
-            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="./login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="./register.html">Register</a></li>
             <li class="nav-item avatar-wrap" id="avatarNavItem" style="display: none">
               <div class="avatar-trigger" id="avatarTrigger" role="button" tabindex="0" aria-expanded="false">
                 <span class="avatar-badge" id="avatarInitial">U</span>
@@ -328,6 +328,7 @@
       const logoutBtn = document.getElementById("logoutBtn");
       const loginLink = document.querySelector('.nav-link[href="./login.html"]');
       const registerLink = document.querySelector('.nav-link[href="./register.html"]');
+      const isAuthPage = /\/(login|register)\.html$/i.test(window.location.pathname);
 
       if (!session) {
         window.location.href = "./login.html";
@@ -368,7 +369,7 @@
       function updateAvatarMenu() {
         const sessionData = JSON.parse(localStorage.getItem("novaSession") || "null");
 
-        if (!sessionData) {
+        if (!sessionData || isAuthPage) {
           avatarNavItem.style.display = "none";
           if (loginLink) loginLink.parentElement.style.display = "block";
           if (registerLink) registerLink.parentElement.style.display = "block";

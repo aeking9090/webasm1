@@ -163,8 +163,8 @@
             <li class="nav-item"><a class="nav-link active" href="cart.html">Cart</a></li>
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
             <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
-            <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="./login.html">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="./register.html">Register</a></li>
             <li class="nav-item avatar-wrap" id="avatarNavItem" style="display: none">
               <div class="avatar-trigger" id="avatarTrigger" role="button" tabindex="0" aria-expanded="false">
                 <span class="avatar-badge" id="avatarInitial">U</span>
@@ -253,6 +253,7 @@
       const customerLogoutBtn = document.getElementById("customerLogoutBtn");
       const loginLink = document.querySelector('.nav-link[href="./login.html"]');
       const registerLink = document.querySelector('.nav-link[href="./register.html"]');
+      const isAuthPage = /\/(login|register)\.html$/i.test(window.location.pathname);
 
       function getCart() {
         return JSON.parse(localStorage.getItem("novaCart") || "[]");
@@ -330,7 +331,7 @@
       function updateAvatarMenu() {
         const session = JSON.parse(localStorage.getItem("novaSession") || "null");
 
-        if (!session) {
+        if (!session || isAuthPage) {
           avatarNavItem.style.display = "none";
           customerCard.style.display = "none";
           if (loginLink) loginLink.parentElement.style.display = "block";
