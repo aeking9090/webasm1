@@ -330,7 +330,7 @@
         }
 
         localStorage.setItem("novaSession", JSON.stringify({ email, name: match.name, avatar: match.avatar || null }));
-        window.location.href = "index.html";
+        window.location.replace("/index.html");
       });
     </script>
   </body>
