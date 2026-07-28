@@ -230,6 +230,28 @@
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       }
 
+      function renderAvatarElement(element, avatarValue, fallbackText) {
+        if (!element) return;
+
+        element.innerHTML = "";
+
+        if (avatarValue && typeof avatarValue === "string" && avatarValue.startsWith("data:image")) {
+          const img = document.createElement("img");
+          img.src = avatarValue;
+          img.alt = "User avatar";
+          img.className = "rounded-circle object-fit-cover";
+          img.style.width = "100%";
+          img.style.height = "100%";
+          element.appendChild(img);
+          return;
+        }
+
+        const text = document.createElement("span");
+        text.textContent = (avatarValue && typeof avatarValue === "string" && avatarValue.trim()) ? avatarValue : fallbackText;
+        text.className = "fw-semibold";
+        element.appendChild(text);
+      }
+
       function updateAvatarMenu() {
         const session = JSON.parse(localStorage.getItem("novaSession") || "null");
 
