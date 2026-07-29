@@ -454,6 +454,17 @@
           });
         }
 
+        updateAvatarMenu();
+        loadProfile();
+
+        window.addEventListener("pageshow", function () {
+          updateAvatarMenu();
+          const sessionData = JSON.parse(localStorage.getItem("novaSession") || "null");
+          if (!sessionData || !sessionData.email) {
+            window.location.href = "./login.html";
+          }
+        });
+
         if (profileForm) {
           profileForm.addEventListener("submit", function (event) {
             event.preventDefault();

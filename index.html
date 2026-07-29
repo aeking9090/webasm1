@@ -633,6 +633,11 @@
       renderProducts();
       updateCartCount();
       updateAvatarMenu();
+
+      window.addEventListener("pageshow", function () {
+        updateCartCount();
+        updateAvatarMenu();
+      });
     </script>
   </body>
 </html>

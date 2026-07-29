@@ -440,6 +440,11 @@
 
       updateAvatarMenu();
       renderCart();
+
+      window.addEventListener("pageshow", function () {
+        updateAvatarMenu();
+        renderCart();
+      });
     </script>
   </body>
 </html>

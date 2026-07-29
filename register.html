@@ -318,6 +318,10 @@
 
       updateAvatarMenu();
 
+      window.addEventListener("pageshow", function () {
+        updateAvatarMenu();
+      });
+
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         errorMessage.textContent = "";
