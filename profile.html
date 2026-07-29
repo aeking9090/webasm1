@@ -260,8 +260,11 @@
                 <div>
                   <h3 class="fw-bold mb-1" id="profileName">User</h3>
                   <p class="text-muted mb-0" id="profileEmail">email@example.com</p>
-                  <input type="file" class="form-control form-control-sm mt-2" id="avatarUpload" accept="image/*" />
-                  <small class="text-muted">Upload any image to use as your avatar.</small>
+                  <div class="d-flex flex-column gap-2 mt-2">
+                    <input type="file" class="form-control form-control-sm" id="avatarUpload" accept="image/*" />
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="uploadAvatarBtn" disabled>Upload</button>
+                    <small class="text-muted">Choose an image, then click Upload to preview it before saving.</small>
+                  </div>
                 </div>
               </div>
               <div class="list-group list-group-flush">
@@ -318,6 +321,7 @@
       const session = JSON.parse(localStorage.getItem("novaSession") || "null");
       const users = JSON.parse(localStorage.getItem("novaUsers") || "[]");
       const avatarUpload = document.getElementById("avatarUpload");
+      const uploadAvatarBtn = document.getElementById("uploadAvatarBtn");
       const profileAvatarDisplay = document.getElementById("profileAvatarDisplay");
       const avatarNavItem = document.getElementById("avatarNavItem");
       const avatarTrigger = document.getElementById("avatarTrigger");
@@ -342,9 +346,12 @@
         return;
       }
 
+      let selectedAvatarFile = null;
+      let previewAvatar = currentUser.avatar || null;
+
       document.getElementById("profileName").textContent = currentUser.name;
       document.getElementById("profileEmail").textContent = currentUser.email;
-      renderAvatarElement(profileAvatarDisplay, currentUser.avatar || null, currentUser.name.charAt(0).toUpperCase());
+      renderAvatarElement(profileAvatarDisplay, previewAvatar, currentUser.name.charAt(0).toUpperCase());
 
       document.getElementById("name").value = currentUser.name;
       document.getElementById("phone").value = currentUser.phone || "";
@@ -393,18 +400,27 @@
         avatarTrigger.setAttribute("aria-expanded", String(isOpen));
       }
 
-      let selectedAvatar = currentUser.avatar || null;
-
       avatarUpload.addEventListener("change", function () {
         const file = this.files[0];
-        if (!file) return;
+        if (!file) {
+          selectedAvatarFile = null;
+          uploadAvatarBtn.disabled = true;
+          return;
+        }
+
+        selectedAvatarFile = file;
+        uploadAvatarBtn.disabled = false;
+      });
+
+      uploadAvatarBtn.addEventListener("click", function () {
+        if (!selectedAvatarFile) return;
 
         const reader = new FileReader();
         reader.onload = function (event) {
-          selectedAvatar = event.target.result;
-          renderAvatarElement(profileAvatarDisplay, selectedAvatar, currentUser.name.charAt(0).toUpperCase());
+          previewAvatar = event.target.result;
+          renderAvatarElement(profileAvatarDisplay, previewAvatar, currentUser.name.charAt(0).toUpperCase());
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(selectedAvatarFile);
       });
 
       document.getElementById("backButton").addEventListener("click", function () {
@@ -446,7 +462,7 @@
           phone: document.getElementById("phone").value.trim(),
           email: document.getElementById("email").value.trim(),
           address: document.getElementById("address").value.trim(),
-          avatar: selectedAvatar || currentUser.avatar || null,
+          avatar: previewAvatar || currentUser.avatar || null,
           password: currentUser.password
         };
 
