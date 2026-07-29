@@ -318,169 +318,180 @@
     </footer>
 
     <script>
-      const session = JSON.parse(localStorage.getItem("novaSession") || "null");
-      const users = JSON.parse(localStorage.getItem("novaUsers") || "[]");
-      const avatarUpload = document.getElementById("avatarUpload");
-      const uploadAvatarBtn = document.getElementById("uploadAvatarBtn");
-      const profileAvatarDisplay = document.getElementById("profileAvatarDisplay");
-      const avatarNavItem = document.getElementById("avatarNavItem");
-      const avatarTrigger = document.getElementById("avatarTrigger");
-      const avatarInitial = document.getElementById("avatarInitial");
-      const avatarName = document.getElementById("avatarName");
-      const avatarMenuName = document.getElementById("avatarMenuName");
-      const avatarMenu = document.getElementById("avatarMenu");
-      const logoutBtn = document.getElementById("logoutBtn");
-      const loginLink = document.querySelector('.nav-link[href="./login.html"]');
-      const registerLink = document.querySelector('.nav-link[href="./register.html"]');
-      const isAuthPage = /\/(login|register)\.html$/i.test(window.location.pathname);
+      document.addEventListener("DOMContentLoaded", function () {
+        const session = JSON.parse(localStorage.getItem("novaSession") || "null");
+        const users = JSON.parse(localStorage.getItem("novaUsers") || "[]");
+        const avatarUpload = document.getElementById("avatarUpload");
+        const uploadAvatarBtn = document.getElementById("uploadAvatarBtn");
+        const profileAvatarDisplay = document.getElementById("profileAvatarDisplay");
+        const avatarNavItem = document.getElementById("avatarNavItem");
+        const avatarTrigger = document.getElementById("avatarTrigger");
+        const avatarInitial = document.getElementById("avatarInitial");
+        const avatarName = document.getElementById("avatarName");
+        const avatarMenuName = document.getElementById("avatarMenuName");
+        const avatarMenu = document.getElementById("avatarMenu");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const loginLink = document.querySelector('.nav-link[href="./login.html"]');
+        const registerLink = document.querySelector('.nav-link[href="./register.html"]');
+        const profileForm = document.getElementById("profileForm");
+        const isAuthPage = /\/(login|register)\.html$/i.test(window.location.pathname);
 
-      if (!session || !session.email) {
-        window.location.href = "./login.html";
-        return;
-      }
-
-      const currentUser = users.find((user) => user.email === session.email) || null;
-
-      if (!currentUser) {
-        window.location.href = "./login.html";
-        return;
-      }
-
-      let selectedAvatarFile = null;
-      let previewAvatar = currentUser.avatar || null;
-
-      document.getElementById("profileName").textContent = currentUser.name;
-      document.getElementById("profileEmail").textContent = currentUser.email;
-      renderAvatarElement(profileAvatarDisplay, previewAvatar, currentUser.name.charAt(0).toUpperCase());
-
-      document.getElementById("name").value = currentUser.name;
-      document.getElementById("phone").value = currentUser.phone || "";
-      document.getElementById("email").value = currentUser.email;
-      document.getElementById("address").value = currentUser.address || "";
-
-      function renderAvatarElement(element, avatarValue, fallbackText) {
-        if (!element) return;
-        element.innerHTML = "";
-
-        if (avatarValue && typeof avatarValue === "string" && avatarValue.startsWith("data:image")) {
-          const img = document.createElement("img");
-          img.src = avatarValue;
-          img.alt = "User avatar";
-          img.className = "avatar-image";
-          element.appendChild(img);
-        } else {
-          element.textContent = avatarValue || fallbackText || "U";
-        }
-      }
-
-      function updateAvatarMenu() {
-        const sessionData = JSON.parse(localStorage.getItem("novaSession") || "null");
-
-        if (!sessionData || isAuthPage) {
-          avatarNavItem.style.display = "none";
-          if (loginLink) loginLink.parentElement.style.display = "block";
-          if (registerLink) registerLink.parentElement.style.display = "block";
-          return;
-        }
-
-        const fullName = sessionData.name || sessionData.email?.split("@")[0] || "Customer";
-        const avatarValue = sessionData.avatar || (sessionData.name ? sessionData.name.charAt(0).toUpperCase() : "U");
-        renderAvatarElement(avatarInitial, avatarValue, "U");
-        avatarName.textContent = fullName;
-        avatarMenuName.textContent = fullName;
-        renderAvatarElement(profileAvatarDisplay, avatarValue, fullName.charAt(0).toUpperCase());
-        avatarNavItem.style.display = "flex";
-
-        if (loginLink) loginLink.parentElement.style.display = "none";
-        if (registerLink) registerLink.parentElement.style.display = "none";
-      }
-
-      function toggleAvatarMenu() {
-        const isOpen = avatarMenu.classList.toggle("show");
-        avatarTrigger.setAttribute("aria-expanded", String(isOpen));
-      }
-
-      avatarUpload.addEventListener("change", function () {
-        const file = this.files[0];
-        if (!file) {
-          selectedAvatarFile = null;
-          uploadAvatarBtn.disabled = true;
-          return;
-        }
-
-        selectedAvatarFile = file;
-        uploadAvatarBtn.disabled = false;
-      });
-
-      uploadAvatarBtn.addEventListener("click", function () {
-        if (!selectedAvatarFile) return;
-
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          previewAvatar = event.target.result;
-          renderAvatarElement(profileAvatarDisplay, previewAvatar, currentUser.name.charAt(0).toUpperCase());
-        };
-        reader.readAsDataURL(selectedAvatarFile);
-      });
-
-      document.getElementById("backButton").addEventListener("click", function () {
-        window.location.href = "./index.html";
-      });
-
-      if (avatarTrigger) {
-        avatarTrigger.addEventListener("click", toggleAvatarMenu);
-        avatarTrigger.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            toggleAvatarMenu();
-          }
-        });
-      }
-
-      document.addEventListener("click", (event) => {
-        if (!avatarNavItem.contains(event.target)) {
-          avatarMenu.classList.remove("show");
-          avatarTrigger.setAttribute("aria-expanded", "false");
-        }
-      });
-
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-          localStorage.removeItem("novaSession");
+        if (!session || !session.email) {
           window.location.href = "./login.html";
-        });
-      }
+          return;
+        }
 
-      updateAvatarMenu();
+        let currentUser = users.find((user) => user.email === session.email) || null;
 
-      document.getElementById("profileForm").addEventListener("submit", function (event) {
-        event.preventDefault();
+        if (!currentUser) {
+          window.location.href = "./login.html";
+          return;
+        }
 
-        const updatedUser = {
-          ...currentUser,
-          name: document.getElementById("name").value.trim(),
-          phone: document.getElementById("phone").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          address: document.getElementById("address").value.trim(),
-          avatar: previewAvatar || currentUser.avatar || null,
-          password: currentUser.password
-        };
+        let selectedAvatarFile = null;
+        let previewAvatar = currentUser.avatar || null;
 
-        const updatedUsers = users.map((user) => {
-          if (user.email === currentUser.email) {
-            return updatedUser;
+        function renderAvatarElement(element, avatarValue, fallbackText) {
+          if (!element) return;
+          element.innerHTML = "";
+
+          if (avatarValue && typeof avatarValue === "string" && avatarValue.startsWith("data:image")) {
+            const img = document.createElement("img");
+            img.src = avatarValue;
+            img.alt = "User avatar";
+            img.className = "avatar-image";
+            element.appendChild(img);
+          } else {
+            element.textContent = avatarValue || fallbackText || "U";
           }
-          return user;
+        }
+
+        function updateAvatarMenu() {
+          const sessionData = JSON.parse(localStorage.getItem("novaSession") || "null");
+
+          if (!sessionData || isAuthPage) {
+            avatarNavItem.style.display = "none";
+            if (loginLink) loginLink.parentElement.style.display = "block";
+            if (registerLink) registerLink.parentElement.style.display = "block";
+            return;
+          }
+
+          const fullName = sessionData.name || sessionData.email?.split("@")[0] || "Customer";
+          const avatarValue = sessionData.avatar || (sessionData.name ? sessionData.name.charAt(0).toUpperCase() : "U");
+          renderAvatarElement(avatarInitial, avatarValue, "U");
+          avatarName.textContent = fullName;
+          avatarMenuName.textContent = fullName;
+          renderAvatarElement(profileAvatarDisplay, avatarValue, fullName.charAt(0).toUpperCase());
+          avatarNavItem.style.display = "flex";
+
+          if (loginLink) loginLink.parentElement.style.display = "none";
+          if (registerLink) registerLink.parentElement.style.display = "none";
+        }
+
+        function toggleAvatarMenu() {
+          const isOpen = avatarMenu.classList.toggle("show");
+          avatarTrigger.setAttribute("aria-expanded", String(isOpen));
+        }
+
+        function loadProfile() {
+          document.getElementById("profileName").textContent = currentUser.name;
+          document.getElementById("profileEmail").textContent = currentUser.email;
+          document.getElementById("name").value = currentUser.name;
+          document.getElementById("phone").value = currentUser.phone || "";
+          document.getElementById("email").value = currentUser.email;
+          document.getElementById("address").value = currentUser.address || "";
+          renderAvatarElement(profileAvatarDisplay, previewAvatar, currentUser.name.charAt(0).toUpperCase());
+        }
+
+        avatarUpload.addEventListener("change", function () {
+          const file = this.files[0];
+          if (!file) {
+            selectedAvatarFile = null;
+            uploadAvatarBtn.disabled = true;
+            return;
+          }
+
+          selectedAvatarFile = file;
+          uploadAvatarBtn.disabled = false;
         });
 
-        localStorage.setItem("novaUsers", JSON.stringify(updatedUsers));
-        localStorage.setItem("novaSession", JSON.stringify({ name: updatedUser.name, email: updatedUser.email, avatar: updatedUser.avatar }));
+        uploadAvatarBtn.addEventListener("click", function () {
+          if (!selectedAvatarFile) return;
 
-        document.getElementById("profileName").textContent = updatedUser.name;
-        document.getElementById("profileEmail").textContent = updatedUser.email;
-        renderAvatarElement(profileAvatarDisplay, updatedUser.avatar || null, updatedUser.name.charAt(0).toUpperCase());
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            previewAvatar = event.target.result;
+            renderAvatarElement(profileAvatarDisplay, previewAvatar, currentUser.name.charAt(0).toUpperCase());
+          };
+          reader.readAsDataURL(selectedAvatarFile);
+        });
+
+        document.getElementById("backButton").addEventListener("click", function () {
+          window.location.href = "./index.html";
+        });
+
+        if (avatarTrigger) {
+          avatarTrigger.addEventListener("click", toggleAvatarMenu);
+          avatarTrigger.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              toggleAvatarMenu();
+            }
+          });
+        }
+
+        document.addEventListener("click", (event) => {
+          if (!avatarNavItem.contains(event.target)) {
+            avatarMenu.classList.remove("show");
+            avatarTrigger.setAttribute("aria-expanded", "false");
+          }
+        });
+
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("novaSession");
+            window.location.href = "./login.html";
+          });
+        }
+
+        if (profileForm) {
+          profileForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            currentUser = {
+              ...currentUser,
+              name: document.getElementById("name").value.trim(),
+              phone: document.getElementById("phone").value.trim(),
+              email: document.getElementById("email").value.trim(),
+              address: document.getElementById("address").value.trim(),
+              avatar: previewAvatar || currentUser.avatar || null,
+              password: currentUser.password
+            };
+
+            const updatedUsers = users.map((user) => {
+              if (user.email === session.email) {
+                return currentUser;
+              }
+              return user;
+            });
+
+            localStorage.setItem("novaUsers", JSON.stringify(updatedUsers));
+            localStorage.setItem("novaSession", JSON.stringify({
+              name: currentUser.name,
+              email: currentUser.email,
+              avatar: currentUser.avatar || null
+            }));
+
+            loadProfile();
+            updateAvatarMenu();
+            uploadAvatarBtn.disabled = true;
+            selectedAvatarFile = null;
+            alert("Profile saved successfully.");
+          });
+        }
+
         updateAvatarMenu();
-        window.location.href = "./index.html";
+        loadProfile();
       });
     </script>
   </body>
