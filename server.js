@@ -39,6 +39,14 @@ const products = [
     image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80',
     tag: 'New Arrivals',
     description: 'Minimal style with a refined finish for everyday wear.'
+  },
+  {
+    id: 5,
+    name: 'Apex Trainers',
+    price: 1090000,
+    image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80',
+    tag: 'Performance',
+    description: 'Lightweight trainers built for energy, comfort, and everyday motion.'
   }
 ];
 
