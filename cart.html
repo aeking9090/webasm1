@@ -264,6 +264,11 @@
         localStorage.setItem("novaCart", JSON.stringify(cart));
       }
 
+      function isCustomerLoggedIn() {
+        const session = JSON.parse(localStorage.getItem("novaSession") || "null");
+        return Boolean(session && session.email);
+      }
+
       function renderCart() {
         const cart = getCart();
         cartItemsContainer.innerHTML = "";
@@ -399,10 +404,19 @@
       });
 
       checkoutBtn.addEventListener("click", function () {
-        if (getCart().length === 0) {
+        const cart = getCart();
+
+        if (cart.length === 0) {
           alert("Your cart is empty.");
           return;
         }
+
+        if (!isCustomerLoggedIn()) {
+          alert("Please log in before checkout.");
+          window.location.href = "./login.html";
+          return;
+        }
+
         saveCart([]);
         renderCart();
         alert("Checkout complete! Thank you for shopping with NovaCart.");
